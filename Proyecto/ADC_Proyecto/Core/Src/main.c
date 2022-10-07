@@ -26,6 +26,12 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+#ifndef DWT_H_
+#define DWT_H_
+	#define dwt_inic()	(DWT->CTRL|= DWT_CTRL_CYCCNTENA_Msk)
+	#define dwt_reset()	(DWT->CYCCNT=0)
+	#define dwt_read()	(DWT->CYCCNT)
+#endif /* DWT_H_ */
 
 /* USER CODE END PTD */
 
@@ -59,12 +65,14 @@ static void MX_DMA_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 uint32_t ADC_Value;
-uint32_t valor=0;
+uint32_t ticks=0;
 
 uint32_t ADC_Buffer[ADC_BUF_LEN];
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){//Cuando se llena el buffer se llama a este callback
 
+	ticks = dwt_read();
+	dwt_reset();
 }
 
 /* USER CODE END 0 */
