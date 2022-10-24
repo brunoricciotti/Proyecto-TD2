@@ -17,11 +17,11 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "main.h"
+#include "functions.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -76,16 +76,13 @@ uint32_t ticks=0;
 
 uint32_t ADC_Buffer[ADC_BUF_LEN];
 
+
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){//Cuando se llena el buffer se llama a este callback
 
 	ticks = dwt_read();
 	dwt_reset();
 }
 
-//void ADC1_2_IRQHandler(){
-//	ticks = dwt_read();
-//	dwt_reset();
-//}
 /* USER CODE END 0 */
 
 /**
@@ -95,7 +92,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){//Cuando se llena el buff
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+uint32_t* zcvec [ADC_BUF_SALIDA_LEN];
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -124,6 +121,8 @@ int main(void)
 
   HAL_TIM_OC_Start(&htim3, 1);
   HAL_ADC_Start_DMA(&hadc1,ADC_Buffer, ADC_BUF_LEN);
+  dwt_inic();
+
 
   /* USER CODE END 2 */
 
@@ -132,7 +131,7 @@ int main(void)
   while (1)
   {
 
-	  zero_cross_hyst(ADC_Buffer);
+	zero_cross_hyst(ADC_Buffer,zcvec);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -253,9 +252,9 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 3600-1;
+  htim3.Init.Prescaler = 0;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 1;
+  htim3.Init.Period = 3600;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)

@@ -8,30 +8,35 @@
 #include "functions.h"
 
 
-uint32_t* zero_cross_hyst(uint32_t* ADC_vector){
+void zero_cross_hyst(uint32_t* ADC_vector,uint32_t* buff_salida){
 
-	uint16_t i,j;
+	uint16_t i,j,x;
 	uint8_t actual;
 	uint32_t *buff_ptr = buff_salida;
 
-	if(ADC_vector[0] > BIAS_POS) actual = 1;
-	else actual = 0;
-
-	*(buff_salida) |= (actual << 0);
-
-	for(i=1;i<ADC_BUF_LEN_SALIDA;i++){
+	for(i=0;i<ADC_BUF_SALIDA_LEN;i++){
 		*buff_ptr = 0;
 		//empieza for de 0 a 31
 		for(j=0; j < 32; j++){
 
-			if((ADC_vector[i] > BIAS_POS)&&(actual == 0)) 	    actual = 1;
-			else if((ADC_vector[i] < BIAS_NEG)&&(actual == 1))	actual = 0;
+			x = 32*(i) + j;
 
-			*(buff_ptr) |= (actual <<i%32);
+			if((ADC_vector[x] > BIAS_POS)&&(actual == 0)) 	    actual = 1;
+			else if((ADC_vector[x] < BIAS_NEG)&&(actual == 1))	actual = 0;
+
+			*(buff_ptr) |= (actual <<j%32);
 		}
 
 		buff_ptr++;
 	}
+}
 
-	return buff_ptr;
+uint16_t autocorrelation(uint32_t* zcvec){
+
+	uint16_t windowlen = 512;
+	uint8_t sample_res = 128;
+	uint8_t count = 20;
+
+
+
 }

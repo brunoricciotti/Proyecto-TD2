@@ -59,7 +59,7 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 /* USER CODE BEGIN Private defines */
 #define ADC_BUF_LEN	512
-#define ADC_BUF_LEN_SALIDA 16
+#define ADC_BUF_SALIDA_LEN 16
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

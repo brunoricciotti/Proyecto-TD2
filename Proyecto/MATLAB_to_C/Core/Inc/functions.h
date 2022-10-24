@@ -11,8 +11,8 @@
 #define BIAS_POS	2078
 #define BIAS_NEG	2018
 
-uint32_t buff_salida[ADC_BUF_LEN_SALIDA];
+//uint32_t buff_salida[ADC_BUF_SALIDA_LEN];
 
-uint32_t* zero_cross_hyst(uint32_t* ADC_vector);
+void zero_cross_hyst(uint32_t* ADC_vector,uint32_t* buff_salida);
 
 #endif /* INC_FUNCTIONS_H_ */
