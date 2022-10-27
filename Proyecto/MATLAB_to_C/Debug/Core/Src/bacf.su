@@ -1,0 +1,3 @@
+../Core/Src/bacf.c:11:9:count_bits	24	static
+../Core/Src/bacf.c:22:6:BACF_Compute_1	72	static
+../Core/Src/bacf.c:68:6:BACF_Compute_2	80	static

@@ -17,21 +17,18 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "main.h"
 #include "functions.h"
+#include "bacf.h"
+#include "dwt.h"
+#include "adc_signal.h"
+#include "dsp.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-#ifndef DWT_H_
-#define DWT_H_
-	#define dwt_inic()	(DWT->CTRL|= DWT_CTRL_CYCCNTENA_Msk)
-	#define dwt_reset()	(DWT->CYCCNT=0)
-	#define dwt_read()	(DWT->CYCCNT)
-#endif /* DWT_H_ */
 
 /* USER CODE END PTD */
 
@@ -72,15 +69,22 @@ static void MX_TIM3_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 uint32_t ADC_Value;
-uint32_t ticks=0;
+uint8_t datos_listos = 0;
+uint32_t volatile ticks=0;
 
 uint32_t ADC_Buffer[ADC_BUF_LEN];
+uint32_t temp_out_buffer[ADC_BUF_LEN/2];
+uint32_t zcvec [ADC_BUF_SALIDA_LEN];
+//extern uint32_t ADC_Buffer2[ADC_BUF_LEN];
 
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){//Cuando se llena el buffer se llama a este callback
 
-	ticks = dwt_read();
-	dwt_reset();
+//	ticks = dwt_read();
+//	dwt_reset();
+	datos_listos = 1;
+	HAL_ADC_Stop_DMA(&hadc1);//desactivo el ADC para que no interrumpa el procesamiento
+
 }
 
 /* USER CODE END 0 */
@@ -92,7 +96,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){//Cuando se llena el buff
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-uint32_t* zcvec [ADC_BUF_SALIDA_LEN];
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -131,7 +135,15 @@ uint32_t* zcvec [ADC_BUF_SALIDA_LEN];
   while (1)
   {
 
-	zero_cross_hyst(ADC_Buffer,zcvec);
+	if(datos_listos){
+		zero_cross_hyst(ADC_Buffer2,zcvec);
+		BACF_Compute_1(zcvec, temp_out_buffer, ADC_BUF_LEN);
+		freq_detect(temp_out_buffer,ADC_BUF_LEN/2,300,50);
+		datos_listos = 0;
+		HAL_ADC_Start_DMA(&hadc1,ADC_Buffer, ADC_BUF_LEN);
+
+	}
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -266,7 +278,7 @@ static void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_TIM_OC_Init(&htim3) != HAL_OK)
+  if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
   {
     Error_Handler();
   }
@@ -276,11 +288,11 @@ static void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
-  sConfigOC.OCMode = TIM_OCMODE_TIMING;
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
   sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_OC_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
   }

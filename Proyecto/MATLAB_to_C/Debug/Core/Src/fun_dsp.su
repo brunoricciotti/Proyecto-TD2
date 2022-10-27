@@ -1,0 +1,7 @@
+../Core/Src/fun_dsp.c:27:6:set_bitstream	48	static
+../Core/Src/fun_dsp.c:125:9:zero_cross	32	static
+../Core/Src/fun_dsp.c:163:10:bit_autocorrelate	80	static
+../Core/Src/fun_dsp.c:239:10:freq_detect	64	static
+../Core/Src/fun_dsp.c:315:10:audio_average	24	static
+../Core/Src/fun_dsp.c:334:10:mcm	24	static
+../Core/Src/fun_dsp.c:376:9:max	24	static

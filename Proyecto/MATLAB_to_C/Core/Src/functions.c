@@ -30,13 +30,3 @@ void zero_cross_hyst(uint32_t* ADC_vector,uint32_t* buff_salida){
 		buff_ptr++;
 	}
 }
-
-uint16_t autocorrelation(uint32_t* zcvec){
-
-	uint16_t windowlen = 512;
-	uint8_t sample_res = 128;
-	uint8_t count = 20;
-
-
-
-}

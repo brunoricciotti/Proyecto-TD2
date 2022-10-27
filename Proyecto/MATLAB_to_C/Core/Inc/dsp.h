@@ -8,7 +8,7 @@
 #ifndef DSP_H_
 #define DSP_H_
 
-#include "data_types.h"
+#include "main.h"
 
 uint32_t bit_count_32(uint32_t var);
 
@@ -18,7 +18,7 @@ void set_bitstream(volatile int32_t * audiobuf, volatile uint32_t * bitbuf, cons
 
 uint32_t bit_autocorrelate(volatile uint32_t * bitbuf, volatile uint32_t * acbuf, uint32_t audio_buffer_length);
 
-uint32_t freq_detect(volatile uint32_t * acbuf, int32_t ac_buffer_length, uint32_t ac_max, uint32_t max_peaks);
+uint16_t freq_detect(volatile uint32_t * acbuf, int32_t ac_buffer_length, uint32_t ac_max, uint32_t max_peaks);
 
 uint32_t audio_average(int32_t * data, uint32_t data_length);
 

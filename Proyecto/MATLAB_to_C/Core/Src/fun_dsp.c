@@ -6,10 +6,11 @@
  */
 
 
-#include "data_types.h"
+//#include "data_types.h"
 #include "stdlib.h"
 #include "stdarg.h"
 #include "dsp.h"
+#include "main.h"
 
 
 /*
@@ -235,26 +236,27 @@ uint32_t bit_autocorrelate(volatile uint32_t * bitbuf, volatile uint32_t * acbuf
  */
 
 
-uint32_t freq_detect(volatile uint32_t * acbuf, int32_t ac_buffer_length, uint32_t ac_max, uint32_t max_peaks)
+uint16_t freq_detect(volatile uint32_t * acbuf, int32_t ac_buffer_length, uint32_t ac_max, uint32_t max_peaks)
 {
 
     uint32_t i = 1;
     uint32_t prev_dv = (acbuf[0] > acbuf[1]), next_dv;
     uint32_t amp_thresh = ac_max >> 1, samp_count_thresh = 5;
     uint32_t n_peaks = 0, last_peak_pos = 0;
-    uint32_t est_samples_per_cycle = 0;
+    float est_samples_per_cycle = 0;
     uint32_t compute = 1;
+    uint16_t frequency,promedio=0;
 
     while((i++ < ac_buffer_length - 1) && compute)
     {
 
         prev_dv = next_dv;
-        next_dv = (acbuf[i + 1] > acbuf[i]);
+        next_dv = (acbuf[i + 1] > acbuf[i]);//sera 1 si el valor nuevo es mayor al anterior(pendiente positiva)
 
         if((!prev_dv) && (next_dv) && (acbuf[i] <= amp_thresh)) //Pendiente anterior negativa, actual positiva, amplitud por debajo del umbral
         {
 
-            if(i - last_peak_pos < samp_count_thresh)
+            if(i - last_peak_pos < samp_count_thresh)//si la cantidad de muestras entre los picos es < samp_count_thresh considero que hubo un falso positivo
             {
 
                 if(acbuf[i] == acbuf[last_peak_pos]) //Ambos picos son de igual valor
@@ -266,6 +268,7 @@ uint32_t freq_detect(volatile uint32_t * acbuf, int32_t ac_buffer_length, uint32
                 else if(acbuf[i] < acbuf[last_peak_pos]) //El pico actual es de menor valor
                 {
 
+                	promedio = promedio -last_peak_pos +i;//corrijo el promedio
                     last_peak_pos = i; //Asumo que el anterior fue un falso positivo y seteo la posición del último
 
                 }
@@ -276,6 +279,7 @@ uint32_t freq_detect(volatile uint32_t * acbuf, int32_t ac_buffer_length, uint32
             {
 
                 n_peaks++;
+                promedio += (i -last_peak_pos);
                 last_peak_pos = i;
 
             }
@@ -287,12 +291,13 @@ uint32_t freq_detect(volatile uint32_t * acbuf, int32_t ac_buffer_length, uint32
 
     if(n_peaks)
     {
-
-        est_samples_per_cycle = last_peak_pos / n_peaks;
+        //est_samples_per_cycle = (float)(last_peak_pos / n_peaks);
+    	est_samples_per_cycle = (float)(promedio / n_peaks);
+        frequency = (uint16_t)(est_samples_per_cycle*SAMPLE_FREQ/(2*(ADC_BUF_LEN/2)));
 
     }
 
-    return est_samples_per_cycle;
+    return frequency;
 
 }
 
