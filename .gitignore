@@ -1,2 +1,9 @@
 
 *.xml
+*.map
+*.list
+*.o
+*.mk
+*.o
+*.prefs
+Proyecto/MATLAB_to_C/Debug/makefile
