@@ -24,9 +24,11 @@ void zero_cross_hyst(uint32_t* ADC_vector,uint32_t* buff_salida){
 			if((ADC_vector[x] > BIAS_POS)&&(actual == 0)) 	    actual = 1;
 			else if((ADC_vector[x] < BIAS_NEG)&&(actual == 1))	actual = 0;
 
-			*(buff_ptr) |= (actual <<j%32);
+			*(buff_ptr) |= (actual << (31 - j % 32));
 		}
 
 		buff_ptr++;
 	}
 }
+
+uint16_t closest_freq(uint)

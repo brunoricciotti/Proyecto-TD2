@@ -293,7 +293,7 @@ uint16_t freq_detect(volatile uint32_t * acbuf, int32_t ac_buffer_length, uint32
     {
         //est_samples_per_cycle = (float)(last_peak_pos / n_peaks);
     	est_samples_per_cycle = (float)(promedio / n_peaks);
-        frequency = (uint16_t)(est_samples_per_cycle*SAMPLE_FREQ/(2*(ADC_BUF_LEN/2)));
+        frequency = (uint16_t)(SAMPLE_FREQ/est_samples_per_cycle);
 
     }
 
