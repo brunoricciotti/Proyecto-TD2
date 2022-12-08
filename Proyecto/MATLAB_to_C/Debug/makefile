@@ -60,8 +60,8 @@ all: main-build
 main-build: Matlab_to_C.elf secondary-outputs
 
 # Tool invocations
-Matlab_to_C.elf Matlab_to_C.map: $(OBJS) $(USER_OBJS) C:\Users\bruno\OneDrive\Documentos\TD2\Proyecto-TD2\Proyecto\MATLAB_to_C\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Matlab_to_C.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\bruno\OneDrive\Documentos\TD2\Proyecto-TD2\Proyecto\MATLAB_to_C\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Matlab_to_C.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Matlab_to_C.elf Matlab_to_C.map: $(OBJS) $(USER_OBJS) D:\Documentos\TD2\Proyecto-TD2\Proyecto\MATLAB_to_C\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Matlab_to_C.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"D:\Documentos\TD2\Proyecto-TD2\Proyecto\MATLAB_to_C\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Matlab_to_C.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
