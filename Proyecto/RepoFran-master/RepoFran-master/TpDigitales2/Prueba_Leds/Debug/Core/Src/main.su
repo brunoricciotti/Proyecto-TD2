@@ -1,0 +1,10 @@
+../Core/Src/main.c:76:5:main	16	static
+../Core/Src/main.c:156:6:SystemClock_Config	72	static
+../Core/Src/main.c:196:13:MX_SPI2_Init	8	static
+../Core/Src/main.c:232:13:MX_DMA_Init	16	static
+../Core/Src/main.c:245:13:MX_GPIO_Init	40	static
+../Core/Src/main.c:267:6:TLC_data_cero	16	static
+../Core/Src/main.c:276:7:TLC_data_uno	16	static
+../Core/Src/main.c:285:7:set_led_val	24	static
+../Core/Src/main.c:330:7:enviarDatos	8	static
+../Core/Src/main.c:345:6:Error_Handler	4	static,ignoring_inline_asm

@@ -236,6 +236,7 @@ uint32_t bit_autocorrelate(volatile uint32_t * bitbuf, volatile uint32_t * acbuf
  */
 
 
+/*
 uint16_t freq_detect(volatile uint32_t * acbuf, int32_t ac_buffer_length, uint32_t ac_max, uint32_t max_peaks)
 {
 
@@ -299,6 +300,26 @@ uint16_t freq_detect(volatile uint32_t * acbuf, int32_t ac_buffer_length, uint32
 
     return frequency;
 
+}*/
+
+uint32_t freq_detect(uint32_t * bacf_in, uint32_t len)
+{
+	uint32_t sample_index = 14;//no puede haber un minimo antes del elemento 14
+	uint8_t p_slope, n_slope;
+
+	p_slope = bacf_in[sample_index] > bacf_in[sample_index - 1];
+
+	while(sample_index < (len - 1))
+	{
+		n_slope = bacf_in[sample_index + 1] > bacf_in[sample_index];
+		if(!p_slope && n_slope)
+		{
+			if(bacf_in[sample_index] < 10) return sample_index;
+		}
+		p_slope = n_slope;
+		sample_index++;
+	}
+	return 0;
 }
 
 

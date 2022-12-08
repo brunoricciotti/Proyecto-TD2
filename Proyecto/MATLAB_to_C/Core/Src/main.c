@@ -141,7 +141,7 @@ int main(void)
 		freq_detect(temp_out_buffer,ADC_BUF_LEN/2,300,50);
 		datos_listos = 0;
 		HAL_ADC_Start_DMA(&hadc1,ADC_Buffer, ADC_BUF_LEN);
-
+		closest_period()
 	}
 
     /* USER CODE END WHILE */

@@ -59,6 +59,9 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 /* USER CODE BEGIN Private defines */
 #define ADC_BUF_LEN	512
+#define CANT_FRECS 47
+#define CANT_CICLOSS 12
+#define CANT_OCTAVAS 4
 #define ADC_BUF_SALIDA_LEN 16
 #define SAMPLE_FREQ	7000//Hz
 
